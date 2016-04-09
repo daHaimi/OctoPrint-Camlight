@@ -31,7 +31,8 @@ def start_gpio(speed):
     
 def change_gpio(speed):
     global gpio_resource
-    gpio_resource.ChangeDutyCycle(speed)
+    if gpio_resource <> 0:
+        gpio_resource.ChangeDutyCycle(speed)
 
 if os.path.exists(sockpath):
     os.remove(sockpath)
