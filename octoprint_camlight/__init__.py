@@ -3,9 +3,10 @@ from __future__ import absolute_import
 import os, os.path
 import octoprint.plugin
 import socket
-import subprocess
+from subprocess import Popen
 
 sockpath = "/var/run/gpio.sock"
+daemon = 0
 client = 0
 
 class CamlightPlugin(octoprint.plugin.StartupPlugin,
@@ -19,7 +20,8 @@ class CamlightPlugin(octoprint.plugin.StartupPlugin,
         global __plugin_name__
         global client
         global sockpath
-        subprocess.popen(["sudo", "python", "gpiopwm.py"])
+        global daemon
+        daemon = Popen(["sudo", "python", "gpiopwm.py"])
         if os.path.exists(sockpath):
             client = socket.socket(socket.AF_UNIX, socket.SOCK_DGRAM)
             client.connect(sockpath)
