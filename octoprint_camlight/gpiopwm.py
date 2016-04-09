@@ -10,35 +10,6 @@ frequency = 300
 gpio_pin = 13
 gpio_resource = 0
 
-if os.path.exists(sockpath):
-    os.remove(sockpath)
-
-server = socket.socket(socket.AF_UNIX, socket.SOCK_DGRAM)
-server.bind(sockpath)
-os.chmod(sockpath, 0777)
-
-while True:
-    datagram = server.recv(1024)
-    if not datagram:
-        break
-    else:
-        if datagram == "exit":
-            break
-        else:
-            parts = datagram.split()
-            if parts[0] == "set":
-                if gpio_resource == 0:
-                    setup_gpio()
-                    start_gpio(parts[1])
-                else:
-                    change_gpio(parts[1])
-            elif parts[1] == "stp":
-                change_gpio(0)
-                    
-shutdown_gpio()
-server.close()
-os.remove(sockpath)
-
 def setup_gpio():
     global gpio_pin
     GPIO.setwarnings(False)
@@ -61,3 +32,32 @@ def start_gpio(speed):
 def change_gpio(speed):
     global gpio_resource
     gpio_resource.ChangeDutyCycle(speed)
+
+if os.path.exists(sockpath):
+    os.remove(sockpath)
+
+server = socket.socket(socket.AF_UNIX, socket.SOCK_DGRAM)
+server.bind(sockpath)
+os.chmod(sockpath, 0777)
+
+while True:
+    datagram = server.recv(1024)
+    if not datagram:
+        break
+    else:
+        if datagram == "exit":
+            break
+        else:
+            parts = datagram.split()
+            if parts[0] == "set":
+                if gpio_resource == 0:
+                    setup_gpio()
+                    start_gpio(float(parts[1]))
+                else:
+                    change_gpio(float(parts[1]))
+            elif parts[0] == "stp":
+                change_gpio(0)
+                    
+shutdown_gpio()
+server.close()
+os.remove(sockpath)
