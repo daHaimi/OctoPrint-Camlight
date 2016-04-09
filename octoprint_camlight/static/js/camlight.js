@@ -38,7 +38,8 @@ $(function() {
                         }
                     }
                 }
-            });            
+            });  
+            self.ledCmd();          
         });
 
 
