@@ -68,9 +68,9 @@ class CamlightPlugin(octoprint.plugin.StartupPlugin,
                 speed = data["pwm_speed"]
                 
             if lights_on == False:
-                x = raw_input("stp")
+                x = "stp"
             else:
-                x = raw_input("set "+ str(speed))
+                x = "set "+ str(speed)
             if not client:
                 self._logger.error("Client Socket not started!")
             else:
