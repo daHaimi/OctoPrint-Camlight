@@ -15,6 +15,7 @@ if os.path.exists(sockpath):
 
 server = socket.socket(socket.AF_UNIX, socket.SOCK_DGRAM)
 server.bind(sockpath)
+os.chmod(sockpath, 0777)
 
 while True:
     datagram = server.recv(1024)

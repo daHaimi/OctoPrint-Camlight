@@ -27,7 +27,7 @@ class CamlightPlugin(octoprint.plugin.StartupPlugin,
             client.connect(sockpath)
         self._logger.info(__plugin_name__ + " started!")
 
-    def on_shutdown():
+    def on_shutdown(self):
         global client
         if client <> 0:
             client.close()
