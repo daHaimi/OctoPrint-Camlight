@@ -1,37 +1,62 @@
 # coding=utf-8
-
+import time
 from optparse import OptionParser
 import RPi.GPIO as GPIO
+import socket
+import os, os.path
 
-# Min and Max Values
-speed_min = 50
-speed_max = 5000
-gpio_pin = 12
+sockpath = "/var/run/gpio.sock"
+frequency = 300
+gpio_pin = 13
+gpio_resource = 0
 
-GPIO.setwarnings(False)
-GPIO.setmode(GPIO.BOARD)
-GPIO.setup(gpio_pin, GPIO.OUT)
+if os.path.exists(sockpath):
+    os.remove(sockpath)
 
-on_or_off = 0
-speed = 50
+server = socket.socket(socket.AF_UNIX, socket.SOCK_DGRAM)
+server.bind(sockpath)
 
-parser = OptionParser()
-parser.add_option("--speed", dest="speed", help="PWM Speed percentage")
-parser.add_option("--lon", dest="on_or_off", help="Define if lights are turned on or off")
-(options, args) = parser.parse_args()
+while True:
+    datagram = server.recv(1024)
+    if not datagram:
+        break
+    else:
+        if datagram == "exit":
+            break
+        else:
+            parts = datagram.split()
+            if parts[0] == "set":
+                if gpio_resource == 0:
+                    setup_gpio()
+                    start_gpio(parts[1])
+                else:
+                    change_gpio(parts[1])
+            elif parts[1] == "stp":
+                change_gpio(0)
+                    
+shutdown_gpio()
+server.close()
+os.remove(sockpath)
 
-if options.speed:
-    speed = float(options.speed)
-if options.on_or_off:
-    on_or_off = options.on_or_off
+def setup_gpio():
+    global gpio_pin
+    GPIO.setwarnings(False)
+    GPIO.setmode(GPIO.BOARD)
+    GPIO.setup(gpio_pin, GPIO.OUT)
 
-if on_or_off == "true":
-    frequency = speed_min + (((speed_max - speed_min) / 100) * speed)
-    print "Starte PWM auf GPIO" + str(gpio_pin) + " mit " + str(frequency) + " Hz"
-    p = GPIO.PWM(gpio_pin, frequency)
-    p.start(1)
-else:
-    p = GPIO.PWM(gpio_pin, 1)
-    print "Stoppe PWM auf GPIO" + str(gpio_pin)
-    p.stop()
-    GPIO.cleanup()
+def shutdown_gpio():
+    global gpio_resource
+    if gpio_resource <> 0:
+        gpio_resource.stop()
+        GPIO.cleanup()
+        
+def start_gpio(speed):
+    global gpio_pin
+    global frequency
+    global gpio_resource
+    gpio_resource = GPIO.PWM(gpio_pin, frequency)
+    gpio_resource.start(speed)
+    
+def change_gpio(speed):
+    global gpio_resource
+    gpio_resource.ChangeDutyCycle(speed)
