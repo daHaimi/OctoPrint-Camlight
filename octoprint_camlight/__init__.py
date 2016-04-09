@@ -4,7 +4,6 @@ from subprocess import call
 import octoprint.plugin
 
 class CamlightPlugin(octoprint.plugin.StartupPlugin,
-                     octoprint.plugin.ShutdownPlugin,
                      octoprint.plugin.TemplatePlugin,
                      octoprint.plugin.SettingsPlugin,
                      octoprint.plugin.AssetPlugin,
@@ -14,9 +13,17 @@ class CamlightPlugin(octoprint.plugin.StartupPlugin,
         global __plugin_name__
         self._logger.info(__plugin_name__ + " started!")
 
+	def get_settings_defaults(self):
+        return dict(
+			speed = 50,
+            switch = dict(
+                activated = False,
+                auto_cam = True
+            )
+        )
+		
     def get_template_configs(self):
         return [
-            dict(type="settings", custom_bindings = False),
             dict(type="sidebar", custom_bindings = False)
         ]
 
