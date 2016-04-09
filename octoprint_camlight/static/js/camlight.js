@@ -12,7 +12,6 @@ $(function() {
 
         self.lightsOn = false;
         self.turnoff = function() {
-            console.log({off:self.lightsOn});
             if (self.lightsOn == true) {
                 self.lightsOn = false;
                 self.ledCmd();
@@ -20,7 +19,6 @@ $(function() {
         }
 
         self.turnon = function() {
-            console.log({on:self.lightsOn});
             if (self.lightsOn == false) {
                 self.lightsOn = true;
                 self.ledCmd();
