@@ -6,7 +6,7 @@ import socket
 import os, os.path
 
 sockpath = "/var/run/gpio.sock"
-frequency = 300
+frequency = 100
 gpio_pin = 13
 gpio_resource = 0
 
