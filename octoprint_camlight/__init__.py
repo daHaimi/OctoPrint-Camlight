@@ -13,15 +13,15 @@ class CamlightPlugin(octoprint.plugin.StartupPlugin,
         global __plugin_name__
         self._logger.info(__plugin_name__ + " started!")
 
-	def get_settings_defaults(self):
+    def get_settings_defaults(self):
         return dict(
-        speed = 50,
+            speed = 50,
             switch = dict(
                 activated = False,
                 auto_cam = True
             )
         )
-		
+
     def get_template_configs(self):
         return [
             dict(type="sidebar", custom_bindings = False)
