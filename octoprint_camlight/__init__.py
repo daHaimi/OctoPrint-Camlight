@@ -15,7 +15,7 @@ class CamlightPlugin(octoprint.plugin.StartupPlugin,
 
 	def get_settings_defaults(self):
         return dict(
-			speed = 50,
+        speed = 50,
             switch = dict(
                 activated = False,
                 auto_cam = True
