@@ -39,8 +39,8 @@ class CamlightPlugin(octoprint.plugin.StartupPlugin,
                 lights_on = data["lights_on"]
             if "pwm_speed" in data:
                 speed = data["pwm_speed"]
-            call(["sudo", "python", "gpiopwm.py", "--speed", str(speed), "--lon", str(lights_on)])
-            self._logger.info(command + " called with " + str(lights_on) + " " + str(speed))
+            call(["sudo", "python", "gpiopwm.py", "--speed", str(speed), "--lon", str(lights_on).lower()])
+            self._logger.info(command + " called with " + str(lights_on).lower() + " " + str(speed))
 
     def on_api_get(self, request):
         return flask.jsonify(camlight_active=true)
