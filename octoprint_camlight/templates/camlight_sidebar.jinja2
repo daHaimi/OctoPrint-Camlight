@@ -1,0 +1,9 @@
+<form class="form-horizontal">
+    <div class="control-group">
+        {{ _('Helligkeit') }} <span data-bind="text: speedValue"></span><br />
+        <input class="slider-track" type="range" data-bind="value: speed" min="0" max="100" step="1">
+        <br />
+        <button class="btn btn-primary" data-bind="click: turnon">{{ _('Licht an') }}</button>
+        <button class="btn btn-primary" data-bind="click: turnoff">{{ _('Licht aus') }}</button>
+    </div>
+</form>
